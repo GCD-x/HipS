@@ -1,0 +1,19 @@
+ # Ignore directories and files generated during development
+__pycache__/
+*.pyc
+
+# Ignore user-specific files
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates

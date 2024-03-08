@@ -1,0 +1,70 @@
+language: generic
+
+env:
+  global:
+    - HIP_HAS_CACHE=$HOME/.hip-cache
+    - AWS_ACCESS_KEY_ID=<your-access-key>
+    - AWS_SECRET_ACCESS_KEY=<your-secret-key>
+    - AWS_DEFAULT_REGION=us-east-1
+    - S3_BUCKET_NAME=<your-s3-bucket-name>
+    - CODECOV_TOKEN=<your-codecov-token>
+
+matrix:
+  include:
+    - os: linux
+      dist: focal
+      env: HIP_VERSION=1.0.0
+    - os: linux
+      dist: bionic
+      env: HIP_VERSION=2.0.0
+    - os: osx
+      osx_image: xcode12.2
+      env: HIP_VERSION=2.1.0
+
+cache:
+  directories:
+    - $HIP_HAS_CACHE
+    - hip-compiler-$HIP_VERSION
+
+before_install:
+  - echo "Installing hip# dependencies..."
+  - if [ ! -f hip-compiler-$HIP_VERSION/installed ]; then
+      # Install hip# compiler for the specified version
+      # Add commands needed to install the hip# compiler
+      touch hip-compiler-$HIP_VERSION/installed;
+    fi
+
+install:
+  - echo "Installing hip#..."
+  # Add any installation steps specific to your hip# language
+
+jobs:
+  include:
+    - stage: Build
+      script:
+        - echo "Building hip#..."
+
+    - stage: Test
+      script:
+        - echo "Running hip# tests..."
+        # Add commands to run tests for your hip# language
+
+    - stage: Code Coverage
+      script:
+        - echo "Running hip# tests for code coverage..."
+        # Add commands to generate code coverage reports
+        - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+
+    - stage: Deploy
+      script:
+        - echo "Deploying hip# artifacts to AWS S3..."
+        # Add commands to deploy artifacts to AWS S3
+        # Use AWS CLI or other deployment methods here
+
+notifications:
+  email:
+    recipients:
+      - your.email@example.com
+    on_success: always
+    on_failure: always
+    
